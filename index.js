@@ -3,23 +3,97 @@ const closeImg = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5v
 const sendImg = 'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCjxzdmcgdmVyc2lvbj0iMS4xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHg9IjBweCIgeT0iMHB4Ig0KCSB2aWV3Qm94PSIwIDAgODUwIDg1MCIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+DQo8c3R5bGUgdHlwZT0idGV4dC9jc3MiPg0KCS5zdDB7ZmlsbDpub25lO3N0cm9rZTojRkZGRkZGO3N0cm9rZS13aWR0aDo3MjtzdHJva2UtbGluZWNhcDpyb3VuZDt9DQo8L3N0eWxlPg0KPGc+DQoJPHBhdGggY2xhc3M9InN0MCIgZD0iTTY5NS43LDk2LjljMzUuNy0xMC4yLDY4LjYsMjIuOCw1OC40LDU4LjRMNTgyLjIsNzU2LjljLTE4LjQsNjQuNS0xMDQuNSw3Ni42LTE0MCwxOS43TDMyMiw1ODMuOA0KCQljLTEzLjktMjIuMi0zMi42LTQxLTU0LjktNTQuOUw3NC40LDQwOC44Yy01Ni45LTM1LjUtNDQuOC0xMjEuNiwxOS43LTE0MEw2OTUuNyw5Ni45eiIvPg0KCTxwYXRoIGNsYXNzPSJzdDAiIGQ9Ik0zMjEuNyw1MjkuM2wxNTEuOS0xNTEuOSIvPg0KPC9nPg0KPC9zdmc+DQo='
 const logoImg = 'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIj8+DQo8c3ZnIHZlcnNpb249IjEuMSINCgkgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4PSIwcHgiIHk9IjBweCIgdmlld0JveD0iMCAwIDMwMCAzMDAiDQoJIHhtbDpzcGFjZT0icHJlc2VydmUiPg0KPGVsbGlwc2UgZmlsbD0iI0ZGRkZGRiIgY3g9IjE1MCIgY3k9IjE1MCIgcng9IjE1MCIgcnk9IjE1MCIvPg0KPHJlY3QgeD0iODEiIHk9IjczIiBmaWxsPSIjMzMzMzMzIiB3aWR0aD0iMTM4IiBoZWlnaHQ9IjMwIi8+DQo8cmVjdCB4PSIxMzUiIHk9Ijg3IiBmaWxsPSIjMzMzMzMzIiB3aWR0aD0iMzAiIGhlaWdodD0iMTYwIi8+DQo8L3N2Zz4NCg=='
 
-window.onload = () => {
+const styleLink = '/index.css'
+const socketLink = 'ws://5.35.9.218/ws/chat/'
+
+let widget, shadowTextarea, mainTextarea, chatMessages, webSocket
+
+const randomString = (len) => {
+  return [...Array(len)].map(() => Math.random().toString(36)[2]).join('')
+}
+
+const newMessage = ({ from = 'system', message }) => {
+  const chatMessage = document.createElement('div')
+  chatMessage.classList.add('gptChatWidget_chatMessage')
+  chatMessage.classList.add(from === 'system' ? 'gptChatWidget_chatMessageBot' : 'gptChatWidget_chatMessageUser')
+  chatMessage.innerText = message
+  chatMessages.append(chatMessage)
+  chatMessages.scrollTo(0, chatMessages.scrollHeight)
+}
+
+const ping = e => {
+  // setInterval(() => e.target.send('ping'), 5000)
+}
+
+const openChat = () => {
+  if (!webSocket || webSocket.readyState !== WebSocket.OPEN) {
+    // const chatId = window.localStorage.getItem('gptChatWidget_chatId') || randomString(64)
+    const chatId = randomString(64)
+    window.localStorage.setItem('gptChatWidget_chatId', chatId)
+    webSocket = new WebSocket(socketLink + chatId + '/')
+    webSocket.addEventListener('open', ping)
+    webSocket.addEventListener('message', e => {
+      const data = JSON.parse(e.data)
+      newMessage(data)
+    })
+  }
+  widget.classList.add('gptChatWidget_openChat')
+}
+
+const closeChat = () => {
+  widget.classList.remove('gptChatWidget_openChat')
+}
+
+const sendMessage = () => {
+  const message = mainTextarea.value
+  mainTextarea.value = ''
+  mainTextarea.dispatchEvent(new Event('input'))
+  newMessage({
+    from: 'user',
+    message,
+  })
+  webSocket.send(JSON.stringify({ message }))
+}
+
+const newLineOrSend = e => {
+  if ((e.keyCode === 10 || e.keyCode === 13) && (e.ctrlKey || e.metaKey)) {
+    e.preventDefault()
+    sendMessage()
+  }
+}
+
+const changeTextAreaSize = e => {
+  const style = window.getComputedStyle(e.target)
+  const lineHeight = Number.parseInt(style.lineHeight)
+  shadowTextarea.style.width = style.width
+  shadowTextarea.style.maxHeight = `${lineHeight * 5}px`
+  shadowTextarea.value = e.target.value
+  let height = shadowTextarea.scrollHeight
+  if (height > lineHeight * 5) {
+    height = lineHeight * 5
+  }
+  e.target.style.height = `${height}px`
+}
+
+/*
+  initMessages.forEach(item => {
+    const chatMessage = document.createElement('div')
+    chatMessage.classList.add('gptChatWidget_chatMessage')
+    chatMessage.classList.add(item.from === 'bot' ? 'gptChatWidget_chatMessageBot' : 'gptChatWidget_chatMessageUser')
+    chatMessage.innerText = item.message
+    chatMessages.append(chatMessage)
+  })
+*/
+
+const createChatWidget = () => {
   const style = document.createElement('link')
   style.rel = 'stylesheet'
-  style.href = '/index.css'
+  style.href = styleLink
   document.head.append(style)
 
-  const widget = document.createElement('div')
+  widget = document.createElement('div')
   widget.className = 'gptChatWidget'
   document.body.append(widget)
-
-  const openChat = () => {
-    widget.classList.add('gptChatWidget_openChat')
-  }
-
-  const closeChat = () => {
-    widget.classList.remove('gptChatWidget_openChat')
-  }
 
   const startButton = document.createElement('button')
   startButton.className = 'gptChatWidget_button gptChatWidget_startButton'
@@ -63,93 +137,34 @@ window.onload = () => {
   chatTitle2.innerText = 'Как я могу помочь?'
   chatHeader.append(chatTitle2)
 
-  const chatMessages = document.createElement('div')
+  chatMessages = document.createElement('div')
   chatMessages.className = 'gptChatWidget_chatMessages'
   chatWindow.append(chatMessages)
-
-  const initMessages = [
-    {
-      from: 'bot',
-      message: 'Привет',
-    },
-    {
-      from: 'user',
-      message: 'Привет',
-    },
-    {
-      from: 'bot',
-      message: 'Как дела?',
-    },
-    {
-      from: 'user',
-      message: 'Жить буду',
-    },
-    {
-      from: 'bot',
-      message: 'Ок',
-    },
-    {
-      from: 'user',
-      message: 'А ты?',
-    },
-    {
-      from: 'bot',
-      message: 'Съешь ещё этих мягких французских булок, да выпей же чаю',
-    },
-    {
-      from: 'user',
-      message: 'Спасибо',
-    },
-    {
-      from: 'bot',
-      message: 'Пока',
-    },
-    {
-      from: 'user',
-      message: 'Пока',
-    },
-  ]
-
-  initMessages.forEach(item => {
-    const chatMessage = document.createElement('div')
-    chatMessage.classList.add('gptChatWidget_chatMessage')
-    chatMessage.classList.add(item.from === 'bot' ? 'gptChatWidget_chatMessageBot' : 'gptChatWidget_chatMessageUser')
-    chatMessage.innerText = item.message
-    chatMessages.append(chatMessage)
-  })
 
   const chatFooter = document.createElement('div')
   chatFooter.className = 'gptChatWidget_chatFooter'
   chatWindow.append(chatFooter)
 
-  const changeTextAreaSize = e => {
-    const style = window.getComputedStyle(e.target)
-    const lineHeight = Number.parseInt(style.lineHeight)
-    shadowTextarea.style.width = style.width
-    shadowTextarea.style.height = style.height
-    shadowTextarea.value = e.target.value
-    let height = shadowTextarea.scrollHeight
-    if (height > lineHeight * 5) {
-      height = lineHeight * 5
-    }
-    e.target.style.height = `${height}px`
-  }
-
-  const mainTextarea = document.createElement('textarea')
+  mainTextarea = document.createElement('textarea')
   mainTextarea.addEventListener('input', changeTextAreaSize)
+  mainTextarea.addEventListener('keydown', newLineOrSend)
   chatFooter.append(mainTextarea)
 
-  const shadowTextarea = document.createElement('textarea')
+  shadowTextarea = document.createElement('textarea')
   shadowTextarea.className = 'gptChatWidget_shadowTextarea'
   chatFooter.append(shadowTextarea)
 
   const sendButton = document.createElement('button')
   sendButton.className = 'gptChatWidget_button gptChatWidget_sendButton'
-  sendButton.addEventListener('click', openChat)
+  sendButton.addEventListener('click', sendMessage)
   chatFooter.append(sendButton)
 
   const sendButtonImg = document.createElement('img')
   sendButtonImg.src = sendImg
   sendButtonImg.alt = 'send'
   sendButton.append(sendButtonImg)
+}
+
+window.onload = () => {
+  createChatWidget()
 }
