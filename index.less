@@ -204,6 +204,22 @@
   }
 }
 
+.gptChatWidget_chatPrinting {
+  display: none;
+  padding: 16px;
+  font-size: 14px;
+  color: @darkGray;
+
+  &.gptChatWidget_chatPrintingActive {
+    display: flex;
+
+    &:after {
+      content: '';
+      animation: 2s linear 0s infinite dots;
+    }
+  }
+}
+
 .gptChatWidget_chatFooter {
   display: flex;
   flex-flow: row nowrap;
@@ -240,5 +256,23 @@
       z-index: -1;
       opacity: 0;
     }
+  }
+}
+
+@keyframes dots {
+  0% {
+    content: '';
+  }
+  25% {
+    content: '.';
+  }
+  50% {
+    content: '..';
+  }
+  75% {
+    content: '...';
+  }
+  100% {
+    content: '';
   }
 }

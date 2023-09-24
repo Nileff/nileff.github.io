@@ -6,29 +6,39 @@ const logoImg = 'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIj8+DQo8c3ZnI
 const styleLink = '/index.css'
 const socketLink = 'ws://5.35.9.218/ws/chat/'
 
-let widget, shadowTextarea, mainTextarea, chatMessages, webSocket
+let widget, shadowTextarea, mainTextarea, chatMessages, chatPrinting, webSocket
 
 const randomString = (len) => {
   return [...Array(len)].map(() => Math.random().toString(36)[2]).join('')
 }
 
-const newMessage = ({ from = 'system', message }) => {
+const newMessage = ({ role, message }) => {
   const chatMessage = document.createElement('div')
   chatMessage.classList.add('gptChatWidget_chatMessage')
-  chatMessage.classList.add(from === 'system' ? 'gptChatWidget_chatMessageBot' : 'gptChatWidget_chatMessageUser')
-  chatMessage.innerText = message
-  chatMessages.append(chatMessage)
+  if (role === 'user') {
+    chatPrinting.classList.add('gptChatWidget_chatPrintingActive')
+  } else {
+    if (role === 'ui') {
+      chatMessage.classList.add('gptChatWidget_chatMessageUser')
+    } else {
+      chatPrinting.classList.remove('gptChatWidget_chatPrintingActive')
+      chatMessage.classList.add('gptChatWidget_chatMessageBot')
+    }
+    chatMessage.innerText = message
+    chatMessages.append(chatMessage)
+  }
   chatMessages.scrollTo(0, chatMessages.scrollHeight)
 }
 
 const ping = e => {
+  chatPrinting.classList.add('gptChatWidget_chatPrintingActive')
   // setInterval(() => e.target.send('ping'), 5000)
 }
 
 const openChat = () => {
   if (!webSocket || webSocket.readyState !== WebSocket.OPEN) {
     // const chatId = window.localStorage.getItem('gptChatWidget_chatId') || randomString(64)
-    const chatId = randomString(64)
+    const chatId = 'gpt' + randomString(48)
     window.localStorage.setItem('gptChatWidget_chatId', chatId)
     webSocket = new WebSocket(socketLink + chatId + '/')
     webSocket.addEventListener('open', ping)
@@ -49,8 +59,9 @@ const sendMessage = () => {
   mainTextarea.value = ''
   mainTextarea.dispatchEvent(new Event('input'))
   newMessage({
-    from: 'user',
+    role: 'ui',
     message,
+
   })
   webSocket.send(JSON.stringify({ message }))
 }
@@ -140,6 +151,11 @@ const createChatWidget = () => {
   chatMessages = document.createElement('div')
   chatMessages.className = 'gptChatWidget_chatMessages'
   chatWindow.append(chatMessages)
+
+  chatPrinting = document.createElement('div')
+  chatPrinting.className = 'gptChatWidget_chatPrinting'
+  chatPrinting.innerText = 'Печатаем ответ'
+  chatWindow.append(chatPrinting)
 
   const chatFooter = document.createElement('div')
   chatFooter.className = 'gptChatWidget_chatFooter'
