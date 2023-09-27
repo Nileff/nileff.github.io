@@ -125,13 +125,13 @@
   right: 16px;
 }
 .gptChatWidget_chatHeader h1 {
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 500;
   text-transform: uppercase;
   color: #777777;
 }
 .gptChatWidget_chatHeader h2 {
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 500;
   color: #1F1F1F;
 }
@@ -156,7 +156,7 @@
 .gptChatWidget_chatMessages .gptChatWidget_chatMessage {
   padding: 12px;
   border-radius: 8px;
-  font-size: 14px;
+  font-size: 16px;
   color: #1F1F1F;
   max-width: calc(100% - 60px);
 }
@@ -174,7 +174,7 @@
 .gptChatWidget_chatPrinting {
   display: none;
   padding: 16px;
-  font-size: 14px;
+  font-size: 16px;
   color: #777777;
 }
 .gptChatWidget_chatPrinting.gptChatWidget_chatPrintingActive {
@@ -195,10 +195,10 @@
 .gptChatWidget_chatFooter textarea {
   resize: none;
   flex: 1;
-  font-size: 14px;
-  line-height: 18px;
+  font-size: 16px;
+  line-height: 20px;
   padding: 0;
-  min-height: 36px;
+  min-height: 40px;
   border: none;
   outline: none;
   background: transparent;
