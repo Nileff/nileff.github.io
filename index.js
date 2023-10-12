@@ -181,10 +181,6 @@ const createChatWidget = () => {
   chatTitle1.innerText = 'Привет!'
   chatHeader.append(chatTitle1)
 
-  const chatTitle2 = document.createElement('h2')
-  chatTitle2.innerText = 'Как я могу помочь?'
-  chatHeader.append(chatTitle2)
-
   chatMessages = document.createElement('div')
   chatMessages.className = 'gptChatWidget_chatMessages'
   chatWindow.append(chatMessages)
