@@ -5,6 +5,9 @@ const logoImg = 'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIj8+DQo8c3ZnI
 
 const styleLink = '/index.css'
 const socketLink = 'wss://chat.kutkh.co/chat/'
+const reconnectTimeout = 5 * 1000
+const chatPrintingText = 'Печатаем ответ'
+const chatConnectingText = 'Подключаемся'
 
 let widget, shadowTextarea, mainTextarea, sendButton, chatMessages, chatPrinting, webSocket, messages
 
@@ -54,13 +57,26 @@ const ping = e => {
 }
 
 const createWebSocket = (chatId) => {
-  webSocket = new WebSocket(socketLink + chatId + '/')
-  webSocket.addEventListener('open', ping)
-  webSocket.addEventListener('error', () => createWebSocket(chatId))
-  webSocket.addEventListener('message', e => {
-    const data = JSON.parse(e.data)
-    newMessage(data)
-  })
+  const chatClosed = window.localStorage.getItem('gptChatWidget_chatClosed') || 0
+  const time = Date.now().toString() - chatClosed
+  if (time > reconnectTimeout) {
+    chatPrinting.classList.remove('gptChatWidget_chatPrintingActive')
+    chatPrinting.innerText = chatPrintingText
+    webSocket = new WebSocket(socketLink + chatId + '/')
+    webSocket.addEventListener('open', ping)
+    webSocket.addEventListener('close', () => {
+      window.localStorage.setItem('gptChatWidget_chatClosed', Date.now().toString())
+      createWebSocket(chatId)
+    })
+    webSocket.addEventListener('message', e => {
+      const data = JSON.parse(e.data)
+      newMessage(data)
+    })
+  } else {
+    chatPrinting.classList.add('gptChatWidget_chatPrintingActive')
+    chatPrinting.innerText = chatConnectingText
+    setTimeout(() => createWebSocket(chatId), 500)
+  }
 }
 
 const openChat = () => {
@@ -191,7 +207,7 @@ const createChatWidget = () => {
 
   chatPrinting = document.createElement('div')
   chatPrinting.className = 'gptChatWidget_chatPrinting'
-  chatPrinting.innerText = 'Печатаем ответ'
+  chatPrinting.innerText = chatPrintingText
   chatWindow.append(chatPrinting)
 
   const chatFooter = document.createElement('div')
@@ -220,4 +236,10 @@ const createChatWidget = () => {
 
 window.onload = () => {
   createChatWidget()
+}
+
+window.onunload = () => {
+  if (webSocket.readyState === WebSocket.OPEN) {
+    window.localStorage.setItem('gptChatWidget_chatClosed', Date.now().toString())
+  }
 }
