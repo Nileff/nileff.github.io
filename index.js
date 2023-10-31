@@ -6,7 +6,7 @@ const logoImg = 'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIj8+DQo8c3ZnI
 const styleLink = '/index.css'
 const socketLink = 'wss://chat.kutkh.co/chat/'
 
-let widget, shadowTextarea, mainTextarea, chatMessages, chatPrinting, webSocket, messages
+let widget, shadowTextarea, mainTextarea, sendButton, chatMessages, chatPrinting, webSocket, messages
 
 const randomString = (len) => {
   return [...Array(len)].map(() => Math.random().toString(36)[2]).join('')
@@ -17,11 +17,15 @@ const newMessage = ({ role, message }) => {
   chatMessage.classList.add('gptChatWidget_chatMessage')
   if (role === 'user') {
     chatPrinting.classList.add('gptChatWidget_chatPrintingActive')
+    sendButton.classList.add('gptChatWidget_sendButtonDisabled')
+    mainTextarea.disabled = true
   } else {
     if (role === 'ui') {
       chatMessage.classList.add('gptChatWidget_chatMessageUser')
     } else {
       chatPrinting.classList.remove('gptChatWidget_chatPrintingActive')
+      sendButton.classList.remove('gptChatWidget_sendButtonDisabled')
+      mainTextarea.disabled = false
       chatMessage.classList.add('gptChatWidget_chatMessageBot')
     }
     chatMessage.innerText = message
@@ -203,7 +207,7 @@ const createChatWidget = () => {
   shadowTextarea.className = 'gptChatWidget_shadowTextarea'
   chatFooter.append(shadowTextarea)
 
-  const sendButton = document.createElement('button')
+  sendButton = document.createElement('button')
   sendButton.className = 'gptChatWidget_button gptChatWidget_sendButton'
   sendButton.addEventListener('click', sendMessage)
   chatFooter.append(sendButton)
