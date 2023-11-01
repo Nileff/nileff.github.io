@@ -229,6 +229,7 @@ const initChatWidget = ({
     const chatPolicy = document.createElement('a')
     chatPolicy.className = 'gptChatWidget_chatPolicy'
     chatPolicy.href = policy
+    chatPolicy.target = '_blank'
     chatPolicy.innerText = 'условия использования'
     chatHeader.append(chatPolicy)
   }
