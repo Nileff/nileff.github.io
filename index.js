@@ -88,7 +88,7 @@ const openChat = () => {
       initMessages()
     }
     window.localStorage.setItem('gptChatWidget_chatId', chatId)
-    // createWebSocket(chatId)
+    createWebSocket(chatId)
     mainTextarea.focus()
   }
   widget.classList.add('gptChatWidget_openChat')
