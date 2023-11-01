@@ -126,17 +126,12 @@
   position: relative;
   display: flex;
   flex-shrink: 0;
-  flex-flow: column nowrap;
+  flex-flow: row nowrap;
   justify-content: flex-start;
   align-items: flex-start;
   padding: 16px;
   background: linear-gradient(lighten(@blue, 40%), transparent);
   border-radius: 16px 16px 0 0;
-
-  > * {
-    margin-block: 0;
-    margin-inline: 0;
-  }
 
   > *:not(:last-child) {
     margin-bottom: 8px;
@@ -156,11 +151,32 @@
     right: 16px;
   }
 
-  h1 {
-    font-size: 18px;
-    font-weight: 500;
-    text-transform: uppercase;
+  .gptChatWidget_titles {
+    margin-left: 12px;
+
+    > * {
+      margin-block: 0;
+      margin-inline: 0;
+    }
+
+    h2 {
+      font-size: 12px;
+      font-weight: 700;
+      color: @black;
+    }
+
+    h3 {
+      font-size: 12px;
+      font-weight: normal;
+      color: @darkGray;
+    }
+  }
+
+  .gptChatWidget_chatPolicy {
+    font-size: 12px;
     color: @darkGray;
+    margin-left: auto;
+    margin-right: 28px;
   }
 }
 

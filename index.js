@@ -1,7 +1,6 @@
 const messageImg = 'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCjxzdmcgdmVyc2lvbj0iMS4xIiBpZD0i0KHQu9C+0LlfMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgeD0iMHB4IiB5PSIwcHgiDQoJIHZpZXdCb3g9IjAgMCAyNCAyNCIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+DQo8cGF0aCBmaWxsPSIjRkZGRkZGIiBkPSJNMTgsMjAuMmgtNC44bC01LjMsMy42Yy0wLjgsMC41LTEuOSwwLTEuOS0xdi0yLjZjLTMuNiwwLTYtMi40LTYtNlY3YzAtMy42LDIuNC02LDYtNmgxMmMzLjYsMCw2LDIuNCw2LDZ2Ny4yDQoJQzI0LDE3LjgsMjEuNiwyMC4yLDE4LDIwLjJ6Ii8+DQo8cGF0aCBmaWxsPSIjMDAyQzU0IiBkPSJNMTIsMTIuN2MtMC41LDAtMC45LTAuNC0wLjktMC45di0wLjNjMC0xLjQsMS0yLjEsMS40LTIuM2MwLjQtMC4zLDAuNi0wLjUsMC42LTAuOGMwLTAuNi0wLjUtMS4xLTEuMS0xLjENCglzLTEuMSwwLjUtMS4xLDEuMWMwLDAuNS0wLjQsMC45LTAuOSwwLjljLTAuNSwwLTAuOS0wLjQtMC45LTAuOWMwLTEuNiwxLjMtMi45LDIuOS0yLjlzMi45LDEuMywyLjksMi45YzAsMS40LTEsMi4xLTEuNCwyLjMNCgljLTAuNSwwLjMtMC42LDAuNS0wLjYsMC45djAuM0MxMi45LDEyLjMsMTIuNSwxMi43LDEyLDEyLjd6Ii8+DQo8cGF0aCBmaWxsPSIjMDAyQzU0IiBkPSJNMTIsMTUuNmMtMC41LDAtMC45LTAuNC0wLjktMC45YzAtMC41LDAuNC0wLjksMC45LTAuOXMwLjksMC40LDAuOSwwLjlDMTIuOSwxNS4yLDEyLjUsMTUuNiwxMiwxNS42eiIvPg0KPC9zdmc+DQo='
 const closeImg = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA4MDAgODAwIiB4bWw6c3BhY2U9InByZXNlcnZlIj48cGF0aCBmaWxsPSIjQTBBMEEwIiBkPSJNMjIuNCAyMi40YzI5LjgtMjkuOCA3OC4yLTI5LjggMTA4IDBsMjcwLjEgMjcwLjFMNjcwLjYgMjIuNGMzMC4zLTI5LjMgNzguNy0yOC41IDEwOCAxLjkgMjguNiAyOS42IDI4LjYgNzYuNSAwIDEwNi4xTDUwOC41IDQwMC41bDI3MC4xIDI3MC4xYzI5LjMgMzAuMyAyOC41IDc4LjctMS45IDEwOC0yOS42IDI4LjYtNzYuNSAyOC42LTEwNi4xIDBMNDAwLjUgNTA4LjUgMTMwLjQgNzc4LjZjLTMwLjMgMjkuMy03OC43IDI4LjUtMTA4LTEuOS0yOC42LTI5LjYtMjguNi03Ni41IDAtMTA2LjFsMjcwLjEtMjcwLjFMMjIuNCAxMzAuNGMtMjkuOS0yOS45LTI5LjktNzguMiAwLTEwOHoiLz48L3N2Zz4='
 const sendImg = 'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCjxzdmcgdmVyc2lvbj0iMS4xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHg9IjBweCIgeT0iMHB4Ig0KCSB2aWV3Qm94PSIwIDAgODUwIDg1MCIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+DQo8c3R5bGUgdHlwZT0idGV4dC9jc3MiPg0KCS5zdDB7ZmlsbDpub25lO3N0cm9rZTojRkZGRkZGO3N0cm9rZS13aWR0aDo3MjtzdHJva2UtbGluZWNhcDpyb3VuZDt9DQo8L3N0eWxlPg0KPGc+DQoJPHBhdGggY2xhc3M9InN0MCIgZD0iTTY5NS43LDk2LjljMzUuNy0xMC4yLDY4LjYsMjIuOCw1OC40LDU4LjRMNTgyLjIsNzU2LjljLTE4LjQsNjQuNS0xMDQuNSw3Ni42LTE0MCwxOS43TDMyMiw1ODMuOA0KCQljLTEzLjktMjIuMi0zMi42LTQxLTU0LjktNTQuOUw3NC40LDQwOC44Yy01Ni45LTM1LjUtNDQuOC0xMjEuNiwxOS43LTE0MEw2OTUuNyw5Ni45eiIvPg0KCTxwYXRoIGNsYXNzPSJzdDAiIGQ9Ik0zMjEuNyw1MjkuM2wxNTEuOS0xNTEuOSIvPg0KPC9nPg0KPC9zdmc+DQo='
-const logoImg = 'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIj8+DQo8c3ZnIHZlcnNpb249IjEuMSINCgkgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4PSIwcHgiIHk9IjBweCIgdmlld0JveD0iMCAwIDMwMCAzMDAiDQoJIHhtbDpzcGFjZT0icHJlc2VydmUiPg0KPGVsbGlwc2UgZmlsbD0iI0ZGRkZGRiIgY3g9IjE1MCIgY3k9IjE1MCIgcng9IjE1MCIgcnk9IjE1MCIvPg0KPHJlY3QgeD0iODEiIHk9IjczIiBmaWxsPSIjMzMzMzMzIiB3aWR0aD0iMTM4IiBoZWlnaHQ9IjMwIi8+DQo8cmVjdCB4PSIxMzUiIHk9Ijg3IiBmaWxsPSIjMzMzMzMzIiB3aWR0aD0iMzAiIGhlaWdodD0iMTYwIi8+DQo8L3N2Zz4NCg=='
 
 const styleLink = '/index.css'
 const socketLink = 'wss://chat.kutkh.co/chat/'
@@ -29,6 +28,7 @@ const newMessage = ({ role, message }) => {
       chatPrinting.classList.remove('gptChatWidget_chatPrintingActive')
       sendButton.classList.remove('gptChatWidget_sendButtonDisabled')
       mainTextarea.disabled = false
+      mainTextarea.focus()
       chatMessage.classList.add('gptChatWidget_chatMessageBot')
     }
     chatMessage.innerText = message
@@ -52,7 +52,6 @@ const initMessages = () => {
 }
 
 const ping = e => {
-  chatPrinting.classList.add('gptChatWidget_chatPrintingActive')
   setInterval(() => e.target.send('ping'), 5000)
 }
 
@@ -61,7 +60,6 @@ const createWebSocket = (chatId) => {
   const time = Date.now().toString() - chatClosed
   if (time > reconnectTimeout) {
     chatPrinting.classList.remove('gptChatWidget_chatPrintingActive')
-    chatPrinting.innerText = chatPrintingText
     webSocket = new WebSocket(socketLink + chatId + '/')
     webSocket.addEventListener('open', ping)
     webSocket.addEventListener('close', () => {
@@ -73,8 +71,8 @@ const createWebSocket = (chatId) => {
       newMessage(data)
     })
   } else {
-    chatPrinting.classList.add('gptChatWidget_chatPrintingActive')
     chatPrinting.innerText = chatConnectingText
+    chatPrinting.classList.add('gptChatWidget_chatPrintingActive')
     setTimeout(() => createWebSocket(chatId), 500)
   }
 }
@@ -90,7 +88,8 @@ const openChat = () => {
       initMessages()
     }
     window.localStorage.setItem('gptChatWidget_chatId', chatId)
-    createWebSocket(chatId)
+    // createWebSocket(chatId)
+    mainTextarea.focus()
   }
   widget.classList.add('gptChatWidget_openChat')
 }
@@ -153,7 +152,12 @@ const changeTextAreaSize = e => {
   e.target.style.height = `${height}px`
 }
 
-const createChatWidget = () => {
+const initChatWidget = ({
+  logo,
+  title,
+  subtitle,
+  policy,
+}) => {
   const style = document.createElement('link')
   style.rel = 'stylesheet'
   style.href = styleLink
@@ -191,15 +195,43 @@ const createChatWidget = () => {
   closeButtonImg.addEventListener('click', closeChat)
   chatHeader.append(closeButtonImg)
 
-  const chatLogo = document.createElement('img')
-  chatLogo.className = 'gptChatWidget_logo'
-  chatLogo.alt = 'Чат'
-  chatLogo.src = logoImg
-  chatHeader.append(chatLogo)
+  if (logo) {
+    const chatLogo = document.createElement('img')
+    chatLogo.className = 'gptChatWidget_logo'
+    chatLogo.alt = 'Чат'
+    chatLogo.src = logo
+    chatHeader.append(chatLogo)
+  } else {
+    const chatLogo = document.createElement('div')
+    chatLogo.className = 'gptChatWidget_logo'
+    chatHeader.append(chatLogo)
+  }
 
-  const chatTitle1 = document.createElement('h1')
-  chatTitle1.innerText = 'Привет!'
-  chatHeader.append(chatTitle1)
+  if (title || subtitle) {
+    const titles = document.createElement('div')
+    titles.className = 'gptChatWidget_titles'
+    chatHeader.append(titles)
+
+    if (title) {
+      const chatTitle = document.createElement('h2')
+      chatTitle.innerText = title
+      titles.append(chatTitle)
+    }
+
+    if (subtitle) {
+      const chatSubtitle = document.createElement('h3')
+      chatSubtitle.innerText = subtitle
+      titles.append(chatSubtitle)
+    }
+  }
+
+  if (policy) {
+    const chatPolicy = document.createElement('a')
+    chatPolicy.className = 'gptChatWidget_chatPolicy'
+    chatPolicy.href = policy
+    chatPolicy.innerText = 'условия использования'
+    chatHeader.append(chatPolicy)
+  }
 
   chatMessages = document.createElement('div')
   chatMessages.className = 'gptChatWidget_chatMessages'
@@ -232,10 +264,6 @@ const createChatWidget = () => {
   sendButtonImg.src = sendImg
   sendButtonImg.alt = 'send'
   sendButton.append(sendButtonImg)
-}
-
-window.onload = () => {
-  createChatWidget()
 }
 
 window.onunload = () => {
