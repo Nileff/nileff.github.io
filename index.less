@@ -32,27 +32,36 @@
     align-items: center;
     justify-content: center;
     background: @blue;
-    width: 60px;
+    width: 200px;
     height: 60px;
-    border-radius: 50%;
+    border-radius: 30px;
     box-shadow: @shadow;
     transform-origin: bottom right;
-    transition: width 0.2s, height 0.2s;
-
-    &:hover {
-      width: 70px;
-      height: 70px;
-    }
 
     img {
+      display: none;
       width: 55%;
       height: 55%;
     }
 
+    span {
+      font-size: 16px;
+      font-weight: 700;
+      color: @white;
+    }
+
+    &:hover {
+      img {
+        display: block;
+      }
+
+      span {
+        display: none;
+      }
+    }
+
     .gptChatWidget_openChat & {
-      opacity: 0;
-      z-index: -1;
-      transition: width 0.2s, height 0.2s, z-index 0s 0.3s, opacity 0s 0.3s;
+      display: none;
     }
   }
 
@@ -93,17 +102,7 @@
   height: 70px;
   border-radius: 35px;
   transform-origin: bottom right;
-  transition: width 0.3s, height 0.3s, border-radius 0.3s, background-color 0.3s;
   box-shadow: @shadow;
-
-  &.gptChatWidget_chatWindowLoaded {
-    transition: width 0.3s, height 0.3s, border-radius 0.3s, background-color 0.3s, z-index 0s 0.3s, opacity 0s 0.3s;
-  }
-
-  & > * {
-    transition: none;
-    opacity: 0;
-  }
 
   .gptChatWidget_openChat & {
     opacity: 1;
@@ -114,12 +113,6 @@
     height: 600px;
     max-height: calc(100vh - 40px);
     border-radius: 16px;
-    transition: width 0.3s, height 0.3s, border-radius 0.3s, background-color 0.3s;
-
-    & > * {
-      transition: opacity 0.1s 0.3s;
-      opacity: 1;
-    }
   }
 }
 
